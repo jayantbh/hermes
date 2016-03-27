@@ -1,14 +1,32 @@
 /**
  * Created by Jayant Bhawal on 20-03-2016.
  */
-hermes.controller("mainController", function ($scope, $http, $mdToast, $timeout, $mdDialog, $rootScope, peer, $mdSidenav, $mdToast) {
+hermes.controller("mainController", function ($scope, $http, $mdToast, $timeout, $mdDialog, $rootScope, peer, $mdSidenav, $mdToast, $interval) {
 	var main = this;
 	$rootScope.peerStatus = "loading...";
 	main.messages = [];
 	main.duplicateID = false;
+	var conn;
+	var interval;
+
+	function connectToTarget(){
+		conn = peer.connect($rootScope.targetID);
+		conn.on('open', function () {
+			$rootScope.toast('Connected to ' + $rootScope.targetID);
+			if(interval){
+				$interval.cancel(interval);
+			}
+		});
+		conn.on('error', function (err) {
+			console.error(err);
+			$rootScope.toast(err.message);
+		});
+	}
 
 	if (localStorage.targetID) {
 		$rootScope.targetID = localStorage.targetID;
+		connectToTarget();
+		interval = $interval(connectToTarget,3000);
 	}
 
 	$rootScope.setTargetID = function () {
@@ -22,23 +40,23 @@ hermes.controller("mainController", function ($scope, $http, $mdToast, $timeout,
 				localStorage.targetID = $rootScope.targetID;
 				$rootScope.toast('Target ID set to ' + $rootScope.targetID);
 				$rootScope.toggleSidenav();
+
+				connectToTarget();
 			}
 		});
 	};
 	main.send = function () {
-		if ($rootScope.targetID && $rootScope.targetID.length) {
-			var conn = peer.connect($rootScope.targetID);
-			conn.on('open', function () {
-				var msgObj = {id: $rootScope.peerID, message: main.message, time: new Date().getTime()};
-				conn.send(msgObj);
-				$timeout(function () {
-					main.messages.push(msgObj);
-					main.message = "";
-				});
-			});
-			conn.on('error', function (err) {
-				console.error(err);
-				$rootScope.toast(err.message);
+		console.log(conn);
+		if(!conn.open){
+			connectToTarget();
+			$rootScope.toast("Connection isn't open. Retrying to connect.");
+		}
+		else if ($rootScope.targetID && $rootScope.targetID.length && main.message && main.message.trim().length) {
+			var msgObj = {id: $rootScope.peerID, message: main.message, time: new Date().getTime()};
+			conn.send(msgObj);
+			$timeout(function () {
+				main.messages.push(msgObj);
+				main.message = "";
 			});
 		}
 	};
@@ -70,24 +88,27 @@ hermes.controller("mainController", function ($scope, $http, $mdToast, $timeout,
 
 	var isScrewed = false;
 	peer.on('error', function (err) {
-		if(err.type == "unavailable-id"){
+		if (err.type == "unavailable-id") {
 			isScrewed = true;
-			$rootScope.toast(err.message, function () {
-				delete localStorage.peerID;
-				window.location.href = "/";
-			}, "Reset Hermes");
+			$rootScope.toast(err.message, $rootScope.reset(), "Reset Hermes");
 		}
-		else if(!isScrewed){
+		else if (!isScrewed) {
 			console.log(err);
 			$rootScope.toast(err.message);
 		}
 	});
 	peer.on('connection', function (conn) {
+		var who = (conn.peer == $rootScope.targetID)?"Your partner":"Someone";
+		$rootScope.toast(who+" connected to your peer.");
 		console.log(conn);
 		conn.on('data', function (data) {
+			var who = (data.id == $rootScope.targetID)?"Your partner":"Someone";
 			console.log(main.messages);
 			$timeout(function () {
 				main.messages.push(data);
+				if(document.visibilityState != "visible"){
+					$rootScope.notify(data.message,who);
+				}
 			});
 		});
 		conn.on('call', function (call) {
@@ -102,5 +123,11 @@ hermes.controller("mainController", function ($scope, $http, $mdToast, $timeout,
 				console.log('Failed to get local stream', err);
 			});
 		});
+	});
+	peer.on('close', function (data) {
+		console.log(data);
+	});
+	peer.on('disconnected', function (data) {
+		console.log(data);
 	});
 });

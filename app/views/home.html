@@ -1,29 +1,29 @@
 <md-content flex layout="column" id="content">
 	<section layout="row" flex>
 		<md-content flex layout="column" layout-padding>
-			<div layout="column" flex layout-padding layout-fill>
-				<div ng-if="!main.targetID">
+			<md-content layout="column" flex layout-padding layout-fill">
+				<div ng-if="!$root.targetID">
 					<h2 class="md-display-2 grey-text">No target added.</h2>
 					<h2 class="md-display-1 grey-text">Add a target ID in the sidenav.</h2><br/>
 					<h2 class="md-title md-accent grey-text">You would need to ask your partner for their ID.</h2><br/>
 					<h2 class="md-title grey-text">To facilitate two way communcation, you would need to give them your ID (see sidenav) as well.</h2>
 				</div>
-				<div ng-if="main.targetID && !main.messages.length">
+				<div ng-if="$root.targetID && !main.messages.length">
 					<h2 class="md-display-2 grey-text">No messages exchanged.</h2><br/>
 					<h2 class="md-display-1 grey-text">Start typing into the text field below to send a message.</h2>
 				</div>
-				<div ng-if="main.targetID && main.messages.length">
+				<md-content ng-if="$root.targetID && main.messages.length">
 					<md-list flex>
-						<md-list-item class="md-2-line" ng-repeat="msg in main.messages">
+						<md-list-item class="md-2-line peer-chat" ng-repeat="msg in main.messages">
 							<div class="md-list-item-text">
-								<h3>{{(msg.id == $root.peerID)?"Me":(msg.id == main.targetID)?"Partner":"Someone else"}}</h3>
+								<h3>{{(msg.id == $root.peerID)?"Me":(msg.id == $root.targetID)?"Partner":"Someone else"}}</h3>
 								<h4>{{msg.message}}</h4>
 								<p>{{msg.time | date:"MMMM dd, yyyy 'at' HH:mm"}}</p>
 							</div>
 						</md-list-item>
 					</md-list>
-				</div>
-			</div>
+				</md-content>
+			</md-content>
 
 			<div layout="row">
 				<md-input-container flex layout-padding md-no-float style="margin: 0;">

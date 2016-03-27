@@ -2,8 +2,8 @@
 	class="md-sidenav-left"
 	md-component-id="left"
 	md-whiteframe="4">
-	<md-toolbar class="md-tall">
-		<md-icon class="md-48">chat</md-icon>
+	<md-toolbar layout="row" layout-align="center center" layout-padding class="md-tall custom-toolbar">
+		<md-icon>chat</md-icon>
 		<h2 class="md-toolbar-tools">Hermes</h2>
 	</md-toolbar>
 	<md-content layout="column" layout-padding>
@@ -14,13 +14,16 @@
 					   aria-label="Copy">
 				<md-icon>content_copy</md-icon>
 			</md-button>
+			<md-button flex="noshrink" layout-fill class="md-icon-button md-primary">
+				<md-icon ng-click="$root.reset();">refresh</md-icon>
+			</md-button>
 		</div>
 		<div flex layout="row">
 			<md-input-container layout-fill>
 				<label>Target user ID</label>
 				<input ng-model="$root.targetID">
 			</md-input-container>
-			<md-button flex="noshrink" layout-fill class="md-icon-button">
+			<md-button flex="noshrink" layout-fill class="md-icon-button md-primary">
 				<md-icon ng-click="$root.setTargetID();">done</md-icon>
 			</md-button>
 		</div>

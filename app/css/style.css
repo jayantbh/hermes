@@ -1,10 +1,33 @@
 * {
 	outline: none;
 }
+
 md-input-container .md-errors-spacer:empty {
 	min-height: 0;
 	padding: 0;
 }
-.grey-text{
+
+.grey-text {
 	color: grey;
+}
+
+.peer-chat .md-list-item-text {
+	max-width: 100%;
+}
+
+/*noinspection CssInvalidPropertyValue*/
+.peer-chat * {
+	word-break: break-word;
+	white-space: normal !important;
+}
+
+.custom-toolbar md-icon {
+	margin-left: 1rem;
+	font-size: 5rem;
+	height: 5rem;
+	width: 5rem;
+}
+.custom-toolbar .md-toolbar-tools{
+	font-size: 3rem;
+	line-height: 7rem;
 }

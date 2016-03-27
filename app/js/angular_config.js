@@ -29,7 +29,10 @@ hermes
 		//.dark();
 	})
 	.run(function ($rootScope, $mdToast, $mdSidenav) {
-		$rootScope.toast = function (text,callback,actionText) {
+		if (Notification.permission !== 'granted') {
+			Notification.requestPermission();
+		}
+		$rootScope.toast = function (text, callback, actionText) {
 			$mdToast.show(
 				$mdToast.simple()
 					.textContent(text)
@@ -38,13 +41,28 @@ hermes
 					.hideDelay(2000)
 			).then(function (response) {
 					if (response == 'ok') {
-						if(callback){
+						if (callback) {
 							callback();
 						}
 						$mdToast.hide();
 					}
 				});
 		};
+
+		$rootScope.notify = function (message, who) {
+			new Notification("Hermes - " + who + " messaged", {
+				body: message,
+				icon: "static/ic_chat_48pt_3x.png"
+			});
+		};
+
+		$rootScope.reset = function () {
+			if(localStorage.peerID){
+				delete localStorage.peerID;
+				window.location.href = "/";
+			}
+		};
+
 		$rootScope.copySuccess = function () {
 			$rootScope.toast('ID Copied.');
 		};
