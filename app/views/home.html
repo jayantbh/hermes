@@ -1,0 +1,50 @@
+<md-content flex layout="column" id="content">
+	<section layout="row" flex>
+		<md-sidenav
+			class="md-sidenav-left"
+			md-component-id="left"
+			md-whiteframe="4">
+			<md-toolbar class="md-theme-indigo">
+				<h1 class="md-toolbar-tools">Sidenav Left</h1>
+			</md-toolbar>
+			<md-content layout="column" layout-padding>
+				<div>
+					<span>My ID: {{$root.peerID || "*loading*..."}}</span>
+					<md-button ngclipboard ngclipboard-success="$root.copySuccess()"
+							   data-clipboard-text="{{$root.peerID || 'ID_NOT_LOADED'}}" class="md-icon-button md-primary"
+							   aria-label="Copy">
+						<md-icon>content_copy</md-icon>
+					</md-button>
+				</div>
+				<div flex layout="row">
+					<md-input-container layout-fill>
+						<label>Target user ID</label>
+						<input ng-model="main.targetID">
+					</md-input-container>
+					<md-button flex="noshrink" layout-fill class="md-icon-button">
+						<md-icon ng-click="main.setTargetID(); $root.toggleSidenav();">done</md-icon>
+					</md-button>
+				</div>
+			</md-content>
+		</md-sidenav>
+		<md-content flex layout="column" layout-padding>
+			<div layout="column" flex layout-padding layout-fill>
+				<div ng-if="!main.targetID">
+					<h2 class="md-display-2">No target added.</h2>
+					<h2 class="md-display-1">Add a target ID in the sidenav.</h2>
+					<h2 class="md-headline md-accent">You would need to ask your partner for their ID.</h2>
+					<h2 class="md-headline">To facilitate two way communcation, you would need to give them your ID (see sidenav) as well.</h2>
+				</div>
+			</div>
+
+			<div layout="row">
+				<md-input-container flex layout-padding md-no-float style="margin: 0;">
+					<textarea ng-model="message" placeholder="Say something..." md-select-on-focus></textarea>
+				</md-input-container>
+				<md-button class="md-icon-button">
+					<md-icon ng-click="main.send()">send</md-icon>
+				</md-button>
+			</div>
+		</md-content>
+	</section>
+</md-content>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="hermes">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		  content="width=device-width, height=device-height, minimum-scale=1.0, initial-scale=1.0, user-scalable=0">
+
+	<title>Hermes</title>
+	<link rel="stylesheet" href="css/reset.css"/>
+	<link rel="stylesheet" href="_libs/angular-material.min.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="css/style.css"/>
+
+	<script src="_libs/angular.min.js"></script>
+	<script src="_libs/ace.js"></script>
+	<script src="_libs/angular-animate.min.js"></script>
+	<script src="_libs/angular-aria.min.js"></script>
+	<script src="_libs/angular-material.min.js"></script>
+	<script src="_libs/angular-messages.min.js"></script>
+	<script src="_libs/angular-ui-router.min.js"></script>
+	<script src="_libs/peer.js"></script>
+	<script src="_libs/clipboard.min.js"></script>
+	<script src="_libs/ngclipboard.min.js"></script>
+
+	<script src="js/angular_app.js"></script>
+	<script src="js/angular_config.js"></script>
+
+	<script src="controllers/components/dialog.js"></script>
+	<script src="controllers/main_controller.js"></script>
+	<script src="controllers/toolbar_controller.js"></script>
+
+	<script src="_routes/routes.js"></script>
+
+	<base href="/"/>
+</head>
+<body layout="column">
+<div ui-view="toolbar" layout="row"></div>
+<div ui-view="root" flex layout="row"></div>
+</body>
+</html>

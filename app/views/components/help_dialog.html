@@ -1,0 +1,33 @@
+<md-dialog aria-label="Hermes - Help">
+	<form>
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>Hermes - Help</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="dialog.cancel()">
+					<md-icon aria-label="Close dialog">close</md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content>
+			<div class="md-dialog-content">
+				<h2>About Hermes</h2>
+				<p>
+					You can chat normally, nothing is stored at all.
+				</p>
+				<p>
+					You can send files directly. The files are not uploaded to any server, your friend directly gets them.
+				</p>
+				<p>
+					You can call your friend directly. All you need is their ID.
+				</p>
+			</div>
+		</md-dialog-content>
+		<md-dialog-actions layout="row">
+			<span flex></span>
+			<md-button ng-click="dialog.hide()">
+				Thanks!
+			</md-button>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

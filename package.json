@@ -1,28 +1,36 @@
 {
-  "name": "webranium",
+  "name": "hermes",
   "version": "1.0.0",
-  "description": "Text obfuscation.",
+  "description": "Peer to peer communications webapp.",
   "main": "index.js",
   "scripts": {
     "test": "nodemon index.js",
     "start": "node index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jayantbh/hermes.git"
+  },
   "keywords": [
-    "webranium",
-    "text",
-    "scraping",
-    "obfuscation",
-    "protection",
-    "font",
-    "generation"
+    "p2p",
+    "webrtc",
+    "communication",
+    "file",
+    "transfer",
+    "peerjs",
+    "hermes",
+    "messaging",
+    "real",
+    "time"
   ],
   "author": "Jayant Bhawal",
-  "license": "ISC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jayantbh/hermes/issues"
+  },
+  "homepage": "https://github.com/jayantbh/hermes#readme",
   "dependencies": {
     "body-parser": "^1.15.0",
-    "ejs": "^2.4.1",
-    "express": "^4.13.4",
-    "svg2ttf": "^4.0.0",
-    "ttf2svg": "0.0.7"
+    "express": "^4.13.4"
   }
 }
