@@ -1,0 +1,28 @@
+{
+  "name": "webranium",
+  "version": "1.0.0",
+  "description": "Text obfuscation.",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "webranium",
+    "text",
+    "scraping",
+    "obfuscation",
+    "protection",
+    "font",
+    "generation"
+  ],
+  "author": "Jayant Bhawal",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "ejs": "^2.4.1",
+    "express": "^4.13.4",
+    "svg2ttf": "^4.0.0",
+    "ttf2svg": "0.0.7"
+  }
+}
