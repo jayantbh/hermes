@@ -1,3 +1,31 @@
+<md-sidenav
+	class="md-sidenav-left"
+	md-component-id="left"
+	md-whiteframe="4">
+	<md-toolbar class="md-tall">
+		<md-icon class="md-48">chat</md-icon>
+		<h2 class="md-toolbar-tools">Hermes</h2>
+	</md-toolbar>
+	<md-content layout="column" layout-padding>
+		<div>
+			<span>My ID: {{$root.peerID || $root.peerStatus}}</span>
+			<md-button ngclipboard ngclipboard-success="$root.copySuccess()"
+					   data-clipboard-text="{{$root.peerID || 'ID_NOT_LOADED'}}" class="md-icon-button md-primary"
+					   aria-label="Copy">
+				<md-icon>content_copy</md-icon>
+			</md-button>
+		</div>
+		<div flex layout="row">
+			<md-input-container layout-fill>
+				<label>Target user ID</label>
+				<input ng-model="$root.targetID">
+			</md-input-container>
+			<md-button flex="noshrink" layout-fill class="md-icon-button">
+				<md-icon ng-click="$root.setTargetID();">done</md-icon>
+			</md-button>
+		</div>
+	</md-content>
+</md-sidenav>
 <md-toolbar md-whiteframe="4">
 	<div flex layout-align="start center" class="md-toolbar-tools">
 		<md-button class="md-icon-button">
@@ -5,8 +33,17 @@
 		</md-button>
 		<h2>Hermes</h2>
 		<span flex></span>
-		<md-button ng-click="tool.help($event)">
-			Help
+		<md-button class="md-icon-button">
+			<md-icon ng-click="tool.voiceCall()">call</md-icon>
+		</md-button>
+		<md-button class="md-icon-button">
+			<md-icon ng-click="tool.videoCall()">video_call</md-icon>
+		</md-button>
+		<md-button class="md-icon-button">
+			<md-icon ng-click="tool.sendFile()">attachment</md-icon>
+		</md-button>
+		<md-button class="md-icon-button">
+			<md-icon ng-click="tool.help($event)">help</md-icon>
 		</md-button>
 	</div>
 </md-toolbar>

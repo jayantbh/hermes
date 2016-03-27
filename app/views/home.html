@@ -1,45 +1,33 @@
 <md-content flex layout="column" id="content">
 	<section layout="row" flex>
-		<md-sidenav
-			class="md-sidenav-left"
-			md-component-id="left"
-			md-whiteframe="4">
-			<md-toolbar class="md-theme-indigo">
-				<h1 class="md-toolbar-tools">Sidenav Left</h1>
-			</md-toolbar>
-			<md-content layout="column" layout-padding>
-				<div>
-					<span>My ID: {{$root.peerID || "*loading*..."}}</span>
-					<md-button ngclipboard ngclipboard-success="$root.copySuccess()"
-							   data-clipboard-text="{{$root.peerID || 'ID_NOT_LOADED'}}" class="md-icon-button md-primary"
-							   aria-label="Copy">
-						<md-icon>content_copy</md-icon>
-					</md-button>
-				</div>
-				<div flex layout="row">
-					<md-input-container layout-fill>
-						<label>Target user ID</label>
-						<input ng-model="main.targetID">
-					</md-input-container>
-					<md-button flex="noshrink" layout-fill class="md-icon-button">
-						<md-icon ng-click="main.setTargetID(); $root.toggleSidenav();">done</md-icon>
-					</md-button>
-				</div>
-			</md-content>
-		</md-sidenav>
 		<md-content flex layout="column" layout-padding>
 			<div layout="column" flex layout-padding layout-fill>
 				<div ng-if="!main.targetID">
-					<h2 class="md-display-2">No target added.</h2>
-					<h2 class="md-display-1">Add a target ID in the sidenav.</h2>
-					<h2 class="md-headline md-accent">You would need to ask your partner for their ID.</h2>
-					<h2 class="md-headline">To facilitate two way communcation, you would need to give them your ID (see sidenav) as well.</h2>
+					<h2 class="md-display-2 grey-text">No target added.</h2>
+					<h2 class="md-display-1 grey-text">Add a target ID in the sidenav.</h2><br/>
+					<h2 class="md-title md-accent grey-text">You would need to ask your partner for their ID.</h2><br/>
+					<h2 class="md-title grey-text">To facilitate two way communcation, you would need to give them your ID (see sidenav) as well.</h2>
+				</div>
+				<div ng-if="main.targetID && !main.messages.length">
+					<h2 class="md-display-2 grey-text">No messages exchanged.</h2><br/>
+					<h2 class="md-display-1 grey-text">Start typing into the text field below to send a message.</h2>
+				</div>
+				<div ng-if="main.targetID && main.messages.length">
+					<md-list flex>
+						<md-list-item class="md-2-line" ng-repeat="msg in main.messages">
+							<div class="md-list-item-text">
+								<h3>{{(msg.id == $root.peerID)?"Me":(msg.id == main.targetID)?"Partner":"Someone else"}}</h3>
+								<h4>{{msg.message}}</h4>
+								<p>{{msg.time | date:"MMMM dd, yyyy 'at' HH:mm"}}</p>
+							</div>
+						</md-list-item>
+					</md-list>
 				</div>
 			</div>
 
 			<div layout="row">
 				<md-input-container flex layout-padding md-no-float style="margin: 0;">
-					<textarea ng-model="message" placeholder="Say something..." md-select-on-focus></textarea>
+					<textarea ng-model="main.message" placeholder="Say something..." md-select-on-focus></textarea>
 				</md-input-container>
 				<md-button class="md-icon-button">
 					<md-icon ng-click="main.send()">send</md-icon>

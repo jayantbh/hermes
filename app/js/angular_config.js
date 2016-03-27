@@ -3,17 +3,18 @@
  */
 
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+localStorage = window.localStorage;
 
 function peerInit() {
-	if (window.location.hostname == "localhost") {
-		return new Peer({key: 'h1iuagg92ievcxr'});
+	if (localStorage.peerID) {
+		return new Peer(localStorage.peerID, {key: 'h1iuagg92ievcxr'});
 	}
 	else {
 		return new Peer({key: 'h1iuagg92ievcxr'});
 	}
 }
 hermes
-	.constant('peer', peerInit())
+	.value('peer', peerInit())
 	.config(function ($mdThemingProvider) {
 		$mdThemingProvider
 			.theme('default')
@@ -28,12 +29,21 @@ hermes
 		//.dark();
 	})
 	.run(function ($rootScope, $mdToast, $mdSidenav) {
-		$rootScope.toast = function (text) {
+		$rootScope.toast = function (text,callback,actionText) {
 			$mdToast.show(
 				$mdToast.simple()
 					.textContent(text)
-					.hideDelay(3000)
-			);
+					.position("top right")
+					.action(actionText || "OK")
+					.hideDelay(2000)
+			).then(function (response) {
+					if (response == 'ok') {
+						if(callback){
+							callback();
+						}
+						$mdToast.hide();
+					}
+				});
 		};
 		$rootScope.copySuccess = function () {
 			$rootScope.toast('ID Copied.');
