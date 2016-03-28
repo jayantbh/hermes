@@ -46,18 +46,23 @@ hermes.controller("mainController", function ($scope, $http, $mdToast, $timeout,
 		});
 	};
 	main.send = function () {
-		console.log(conn);
-		if(!conn.open){
-			connectToTarget();
-			$rootScope.toast("Connection isn't open. Retrying to connect.");
+		if(conn){
+			console.log(conn);
+			if(!conn.open){
+				connectToTarget();
+				$rootScope.toast("Connection isn't open. Trying to reconnect.");
+			}
+			else if ($rootScope.targetID && $rootScope.targetID.length && main.message && main.message.trim().length) {
+				var msgObj = {id: $rootScope.peerID, message: main.message, time: new Date().getTime()};
+				conn.send(msgObj);
+				$timeout(function () {
+					main.messages.push(msgObj);
+					main.message = "";
+				});
+			}
 		}
-		else if ($rootScope.targetID && $rootScope.targetID.length && main.message && main.message.trim().length) {
-			var msgObj = {id: $rootScope.peerID, message: main.message, time: new Date().getTime()};
-			conn.send(msgObj);
-			$timeout(function () {
-				main.messages.push(msgObj);
-				main.message = "";
-			});
+		else{
+			$rootScope.toast("Connection not established. Partner may be offline.");
 		}
 	};
 	function call() {
