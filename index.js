@@ -14,6 +14,7 @@ app.get("/", function (req, res) {
 
 
 app.use(express.static(__dirname+"/app"));
+app.use(express.static(__dirname));
 
 console.log("Init!");
 app.listen(process.env.PORT || "80");

@@ -31,3 +31,8 @@ md-input-container .md-errors-spacer:empty {
 	font-size: 3rem;
 	line-height: 7rem;
 }
+.truncate{
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}

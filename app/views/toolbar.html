@@ -7,15 +7,15 @@
 		<h2 class="md-toolbar-tools">Hermes</h2>
 	</md-toolbar>
 	<md-content layout="column" layout-padding>
-		<div>
-			<span>My ID: {{$root.peerID || $root.peerStatus}}</span>
+		<div flex layout="row" layout-align="center center">
+			<span flex class="truncate">My ID: {{$root.peerID || $root.peerStatus}}</span>
 			<md-button ngclipboard ngclipboard-success="$root.copySuccess()"
 					   data-clipboard-text="{{$root.peerID || 'ID_NOT_LOADED'}}" class="md-icon-button md-primary"
 					   aria-label="Copy">
 				<md-icon>content_copy</md-icon>
 			</md-button>
-			<md-button flex="noshrink" layout-fill class="md-icon-button md-primary">
-				<md-icon ng-click="$root.reset();">refresh</md-icon>
+			<md-button ng-click="$root.reset();" layout-fill class="md-icon-button md-primary">
+				<md-icon>refresh</md-icon>
 			</md-button>
 		</div>
 		<div flex layout="row">
@@ -23,8 +23,8 @@
 				<label>Target user ID</label>
 				<input ng-model="$root.targetID">
 			</md-input-container>
-			<md-button flex="noshrink" layout-fill class="md-icon-button md-primary">
-				<md-icon ng-click="$root.setTargetID();">done</md-icon>
+			<md-button ng-click="$root.setTargetID();" flex="noshrink" layout-fill class="md-icon-button md-primary">
+				<md-icon>done</md-icon>
 			</md-button>
 		</div>
 	</md-content>
@@ -36,17 +36,17 @@
 		</md-button>
 		<h2>Hermes</h2>
 		<span flex></span>
-		<md-button class="md-icon-button">
-			<md-icon ng-click="tool.voiceCall()">call</md-icon>
+		<md-button ng-click="tool.voiceCall()" class="md-icon-button">
+			<md-icon>call</md-icon>
 		</md-button>
-		<md-button class="md-icon-button">
-			<md-icon ng-click="tool.videoCall()">video_call</md-icon>
+		<md-button ng-click="tool.videoCall()" class="md-icon-button">
+			<md-icon>video_call</md-icon>
 		</md-button>
-		<md-button class="md-icon-button">
-			<md-icon ng-click="tool.sendFile()">attachment</md-icon>
+		<md-button ng-model="tool.files" ngf-multiple="true" ngf-select="tool.sendFile($files)" class="md-icon-button">
+			<md-icon>attachment</md-icon>
 		</md-button>
-		<md-button class="md-icon-button">
-			<md-icon ng-click="tool.help($event)">help</md-icon>
+		<md-button ng-click="tool.help($event)" class="md-icon-button">
+			<md-icon>help</md-icon>
 		</md-button>
 	</div>
 </md-toolbar>

@@ -10,23 +10,28 @@ hermes.controller("mainController", function ($scope, $http, $mdToast, $timeout,
 	var interval;
 
 	function connectToTarget(){
-		conn = peer.connect($rootScope.targetID);
-		conn.on('open', function () {
-			$rootScope.toast('Connected to ' + $rootScope.targetID);
-			if(interval){
-				$interval.cancel(interval);
-			}
-		});
-		conn.on('error', function (err) {
-			console.error(err);
-			$rootScope.toast(err.message);
-		});
+		if(!conn || !peer.disconnected){
+			conn = peer.connect($rootScope.targetID);
+			conn.on('open', function () {
+				$rootScope.toast('Connected to ' + $rootScope.targetID);
+				if(interval){
+					$interval.cancel(interval);
+				}
+			});
+			conn.on('error', function (err) {
+				console.error(err);
+				$rootScope.toast(err.message);
+			});
+		}
+		else{
+			peer.reconnect();
+		}
 	}
 
 	if (localStorage.targetID) {
 		$rootScope.targetID = localStorage.targetID;
 		connectToTarget();
-		interval = $interval(connectToTarget,3000);
+		interval = $interval(connectToTarget,5000);
 	}
 
 	$rootScope.setTargetID = function () {
@@ -36,7 +41,7 @@ hermes.controller("mainController", function ($scope, $http, $mdToast, $timeout,
 				delete localStorage.targetID;
 				$rootScope.targetID = undefined;
 			}
-			else {
+			else if($rootScope.targetID && $rootScope.targetID.length){
 				localStorage.targetID = $rootScope.targetID;
 				$rootScope.toast('Target ID set to ' + $rootScope.targetID);
 				$rootScope.toggleSidenav();
@@ -53,7 +58,7 @@ hermes.controller("mainController", function ($scope, $http, $mdToast, $timeout,
 				$rootScope.toast("Connection isn't open. Trying to reconnect.");
 			}
 			else if ($rootScope.targetID && $rootScope.targetID.length && main.message && main.message.trim().length) {
-				var msgObj = {id: $rootScope.peerID, message: main.message, time: new Date().getTime()};
+				var msgObj = {id: $rootScope.peerID, message: main.message, time: new Date().getTime(), type:"message"};
 				conn.send(msgObj);
 				$timeout(function () {
 					main.messages.push(msgObj);
@@ -62,7 +67,8 @@ hermes.controller("mainController", function ($scope, $http, $mdToast, $timeout,
 			}
 		}
 		else{
-			$rootScope.toast("Connection not established. Partner may be offline.");
+			$rootScope.toast("Connection not established. Partner may be offline. Trying to reconnect.");
+			interval = $interval(connectToTarget,5000);
 		}
 	};
 	function call() {
@@ -78,7 +84,7 @@ hermes.controller("mainController", function ($scope, $http, $mdToast, $timeout,
 	}
 
 	peer.on('open', function (id) {
-		console.log('My peer ID is: ' + id);
+		console.log('My peer ID is: ' + id,peer);
 		$timeout(function () {
 			localStorage.peerID = $rootScope.peerID = id;
 			$rootScope.toast("Connected to WebRTC.");
@@ -93,12 +99,24 @@ hermes.controller("mainController", function ($scope, $http, $mdToast, $timeout,
 
 	var isScrewed = false;
 	peer.on('error', function (err) {
+		console.log(err);
 		if (err.type == "unavailable-id") {
 			isScrewed = true;
+			$rootScope.peerStatus = "Please refresh.";
 			$rootScope.toast(err.message, $rootScope.reset(), "Reset Hermes");
 		}
+		else if(err.type == "peer-unavailable"){
+			$rootScope.toast(err.message, function () {
+				$timeout(function () {
+					$rootScope.targetID = "";
+					delete localStorage.targetID;
+					if(interval){
+						$interval.cancel(interval);
+					}
+				});
+			}, "CLEAR TARGET");
+		}
 		else if (!isScrewed) {
-			console.log(err);
 			$rootScope.toast(err.message);
 		}
 	});

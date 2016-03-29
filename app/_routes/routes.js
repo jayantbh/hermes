@@ -7,7 +7,7 @@ hermes.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
 	$urlRouterProvider.otherwise("/");
 	$stateProvider
 		.state('home', {
-			//url: '/',
+			url: '/',
 			views: {
 				"root": {
 					templateUrl: "views/home.html",
